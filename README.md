@@ -1,6 +1,6 @@
 # python-work
 This repository demonstrates some of the work I have done in Python
-<br\><br\>
+<br /><br />
 File| Description
 ---|---
 reversi|A simple reversi game

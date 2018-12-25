@@ -1,21 +1,31 @@
 import random
 from os import system
 
+# Cell Class with simple functions
 class Cell:
+	# Cell Initialization and has two main variables, current and next state
 	def __init__(self):
 		self.current_state = False
 		self.next_state = False
+	# Returns the character symbol for the current state
 	def get_state(self):
 		if self.current_state == True:
 			return self.get_alive_char()
 		else:
 			return ' '
+	# Returns the Alive character of a Normal Cell ('O')
 	def get_alive_char(self):
 		return 'O'
+	# Sets the current state of the cell to Alive
 	def set_state_alive(self):
 		self.current_state = True
+	# Sets the curren state of the cell to Dead
 	def set_state_dead(self):
 		self.current_state = False
+	# Sets the next state of the cell by the number of neighbors
+	## Normal Cell will die if there are more than 4 neighbors or less than 1
+	## The Cell will be alive if there are exactly 3 neighbors
+	## Cell Remains the same otherwise
 	def set_next_state(self,neighbors):
 		if ((neighbors >= 4) | (neighbors <= 1)):
 			self.next_state = False
@@ -23,14 +33,18 @@ class Cell:
 			self.next_state = True
 		else:
 			self.next_state = self.current_state
+	# Updates the current state with the next state
 	def update(self):
 		self.current_state = self.next_state
 		self.next_state = False
 
+# Inherited Cancer Class with slightly modified rules
 class Cancer(Cell):
+	# Returns the Alive character of a Normal Cell ('X')
 	def get_alive_char(self):
 		return 'X'
-	def next_state_dead(self,neighbors):
+	# Cancer Cell will die if neighbors are more than five or less than one. 
+	def set_next_state(self,neighbors):
 		if ((neighbors >= 5) | (neighbors <= 1)):
 			self.next_state = False
 		elif ((neighbors == 3) & (self.current_state == False)):
@@ -38,13 +52,20 @@ class Cancer(Cell):
 		else:
 			self.next_state = self.current_state
 
+# Board CLass for the Cell Simulation and essentially simulates a character board with some internal functions
 class Board:
+	# No Input Initialization
 	def __init__(self):
 		self.row_max = 20
 		self.col_max = 75
+		self.time = 0
+		self.board = []
+		self.alive_char = ' '
+	# Initialization of Board with Row and Column size
 	def __init__(self,row,col):
 		self.row_max = row
 		self.col_max = col
+	# Returns the Number of Alive Cells on Board
 	def get_num_cells(self):
 		count = 0
 		for i in range(self.row_max):
@@ -52,8 +73,10 @@ class Board:
 				if (self.board[i][j].get_state() == self.alive_char):
 					count += 1
 		return count
+	# Returns the Current Number or States
 	def get_time(self):
 		return self.time
+	# Returns the number of neighbors 
 	def get_neighbors(self,row,col):
 		count = 0
 		y_min = -1
